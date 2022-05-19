@@ -1,0 +1,61 @@
+{
+  "navbar": {
+    "placeholder": "Znajdź przedmiot tutaj...",
+    "profile": {
+      "profile": "Profil",
+      "adminpanel": "Panel Administracyjny",
+      "logout": "Wyloguj się"
+    }
+  },
+  "authorization": {
+    "signin": "Zaloguj się",
+    "signup": "Zarejestruj się",
+    "username": "Nazwa użytkownika",
+    "password": "Hasło",
+    "singininfo": "Mam konto",
+    "singupinfo": "Nie masz konta ?"
+  },
+  "homepage": {
+    "latestitems": "Ostatnio dodane przedmioty",
+    "largestcollection": "Największe kolekcje"
+  },
+  "profile": {
+    "profilenavbar": {
+      "main": "Główna",
+      "collection": "Kolekcje",
+      "liked": "Polubione"
+    },
+    "main": {},
+    "collection": {
+      "title": "Przedmioty w kolekcji"
+    },
+    "liked": {}
+  },
+  "card": {
+    "modal": {
+      "titleCreateCollection": "Stwórz kolekcje",
+      "titleEditCollection": "Edytuj kolekcje",
+      "titleCreateItem": "Dodaj przedmiot",
+      "titleEditItem": "Edytuj przedmiot",
+      "name": "Nazwa",
+      "description": "Opis",
+      "topic": "Temat",
+      "tags": "Etykiety",
+      "additional": "Dodatkowe pola",
+      "image": "Zdjęcie"
+    },
+    "options": {
+      "create": "Stwórz",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "readmore": "Czytaj więcej",
+      "submit": "Zatwierdź"
+    }
+  },
+  "item": {
+    "like": "Lubię to",
+    "dislike": "Nie lubię tego",
+    "tags": "Etykiety",
+    "comments": "Komentarze"
+  }
+}

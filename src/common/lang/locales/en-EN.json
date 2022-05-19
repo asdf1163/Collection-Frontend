@@ -1,0 +1,61 @@
+{
+  "navbar": {
+    "placeholder": "Find your item here...",
+    "profile": {
+      "profile": "Profile",
+      "adminpanel": "Admin Panel",
+      "logout": "Logout"
+    }
+  },
+  "authorization": {
+    "signin": "Sign in",
+    "signup": "Sign up",
+    "username": "Username",
+    "password": "Password",
+    "singininfo": "I have account",
+    "singupinfo": "Don't have account ?"
+  },
+  "homepage": {
+    "latestitems": "Latest items",
+    "largestcollection": "Largest collection"
+  },
+  "profile": {
+    "profilenavbar": {
+      "main": "Main",
+      "collection": "Collection",
+      "liked": "Liked"
+    },
+    "main": {},
+    "collection": {
+      "title": "Collection items"
+    },
+    "liked": {}
+  },
+  "card": {
+    "modal": {
+      "titleCreateCollection": "Create Collection",
+      "titleEditCollection": "Edit Collection",
+      "titleCreateItem": "Create Item",
+      "titleEditItem": "Edit Item",
+      "name": "Name",
+      "description": "Description",
+      "topic": "Topic",
+      "tags": "Tags",
+      "additional": "Additional fields",
+      "image": "Image"
+    },
+    "options": {
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "readmore": "Read More",
+      "submit": "Submit"
+    }
+  },
+  "item": {
+    "like": "Like",
+    "dislike": "Dislike",
+    "tags": "Tags",
+    "comments": "Comments"
+  }
+}

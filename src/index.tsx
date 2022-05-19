@@ -1,15 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import ThemeProvider from './context/ThemeContext';
+import AuthProvider from './context/AuthContext';
+import { I18nextProvider } from 'react-i18next'
+import i18n from './common/lang/i18n'
+import './App.css'
+import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <App />
+    <I18nextProvider i18n={i18n}>
+      <AuthProvider>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </AuthProvider>
+    </I18nextProvider>
   </React.StrictMode>
 );
 
