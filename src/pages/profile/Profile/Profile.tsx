@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Container, Row } from 'react-bootstrap'
 import { Outlet, useParams } from 'react-router-dom'
-import { getUser } from '../../common/api/userApi'
+import { getUser } from '../../../common/api/userApi'
 import ProfileNav from './ProfileNav'
 
 const Profile = () => {

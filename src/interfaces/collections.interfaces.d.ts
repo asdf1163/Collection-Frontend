@@ -21,7 +21,6 @@ export interface Iitem {
     tags: string | string[],
     linkImg?: string,
     additional: {
-        _id?: string,
         name: string,
         value: any
     },

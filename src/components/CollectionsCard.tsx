@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Col, Row, Badge } from 'react-bootstrap'
-import TemplateCollection from './TemplateCollection'
+import TemplateCollection from './Templates/TemplateCollection'
 import { AuthContext, AuthContextType } from '../context/AuthContext'
 import { useTranslation } from 'react-i18next'
 import { Icollection } from '../interfaces/collections.interfaces'
@@ -10,23 +10,20 @@ import { ThemeContext, ThemeContextType } from '../context/ThemeContext'
 
 interface Props {
     collection: Icollection
-    collectionAuthorId?: string
     setCollections?: React.Dispatch<React.SetStateAction<Icollection[]>>
 }
 
-
-const CollectionsCard = ({ collection, collectionAuthorId, setCollections }: Props) => {
+const CollectionsCard = ({ collection, setCollections }: Props) => {
 
     const { auth } = useContext(AuthContext) as AuthContextType
     const { theme } = useContext(ThemeContext) as ThemeContextType;
-
     const { t } = useTranslation()
 
     return (
         <Card className={`bg-${theme.elementBackgroundColor}`}>
             {(auth._id === collection.idUser || auth.privilage === "admin" || auth.privilage === "owner") &&
                 <Col className="d-flex justify-content-end gap-2">
-                    <TemplateCollection type={'edit'} dataCollection={collection} setCollections={setCollections as React.Dispatch<React.SetStateAction<Icollection[]>>} {...{ collectionAuthorId }} />
+                    <TemplateCollection type={'edit'} dataCollection={collection} setCollections={setCollections as React.Dispatch<React.SetStateAction<Icollection[]>>} />
                 </Col>
             }
             <Card.Body className='d-flex flex-column flex-md-row align-items-center'>

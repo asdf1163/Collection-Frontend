@@ -5,7 +5,8 @@
       "profile": "Profile",
       "adminpanel": "Admin Panel",
       "logout": "Logout"
-    }
+    },
+    "theme": "Theme"
   },
   "authorization": {
     "signin": "Sign in",
@@ -56,6 +57,11 @@
     "like": "Like",
     "dislike": "Dislike",
     "tags": "Tags",
-    "comments": "Comments"
+    "comments": "Comments",
+    "textmessage": {
+      "nocomments": "Nobody gave a comment to this item yet",
+      "authtocomment": "Sign in to comment this item",
+      "notfound": "Not found"
+    }
   }
 }

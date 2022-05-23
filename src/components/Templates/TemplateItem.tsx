@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Form, Button, Modal, Container } from 'react-bootstrap'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { deleteItem, postItem, updateItem } from '../common/api/itemApi'
-import { Icollection, Iitem } from '../interfaces/collections.interfaces'
+import { deleteItem, postItem, updateItem } from '../../common/api/itemApi'
+import { Icollection, Iitem } from '../../interfaces/collections.interfaces'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
@@ -11,16 +11,17 @@ interface Props {
     dataCollection?: Icollection
     collectionAuthorId?: string
     setCollection: React.Dispatch<React.SetStateAction<Icollection>>
+    setItems: React.Dispatch<React.SetStateAction<Iitem[]>>
 }
 
-const TemplateItem = ({ type = 'create', dataItem, dataCollection, collectionAuthorId = "", setCollection }: Props) => {
+const TemplateItem = ({ type = 'create', dataItem, dataCollection, collectionAuthorId = "", setCollection, setItems }: Props) => {
     const [show, setShow] = useState(false)
     const { t } = useTranslation()
 
     const { register, control, handleSubmit, formState: { errors } } = useForm<Iitem>({
         defaultValues: {
             name: dataItem?.name,
-            tags: dataItem?.tags,
+            tags: dataItem ? (dataItem?.tags as string[]).join(",") : "",
             linkImg: dataItem?.linkImg,
             additional: dataItem?.additional
         }
@@ -28,21 +29,19 @@ const TemplateItem = ({ type = 'create', dataItem, dataCollection, collectionAut
 
     const onSubmit: SubmitHandler<Iitem> = async (data) => {
         try {
-            Object.assign(data, { collectionId: dataCollection?._id }, { ownerId: dataCollection?.idUser });
+            data.tags = (data.tags as string).split(",").map((tag: string) => tag.trim()).filter(tag => tag)
+            Object.assign(data, { collectionId: dataCollection?._id });
             if (type === 'edit') {
                 const result = await updateItem(data, `${type}/${dataItem?._id}`)
                 if (result.status === 204) {
-                    setCollection((prev: Icollection) =>
-                    ({
-                        ...prev,
-                        items: prev?.items?.map((elem: Iitem) => elem._id === dataItem?._id ? data : elem)
-                    }))
+                    Object.assign(data, { _id: dataItem?._id })
+                    setItems((item: Iitem[]) => item?.map((elem: Iitem) => elem._id === dataItem?._id ? data : elem))
                 }
             }
             else {
                 const result = await postItem(data, type)
                 if (result.status === 200) {
-                    setCollection((prev: any) => ({ ...prev, [prev.items]: { ...prev['items'].push(result['data']) } }))
+                    setItems((item: Iitem[]) => [...item, result.data])
                 }
             }
             return setShow(false)
@@ -56,7 +55,7 @@ const TemplateItem = ({ type = 'create', dataItem, dataCollection, collectionAut
         try {
             const result = await deleteItem({ collectionAuthorId }, `delete/${dataItem?._id}`)
             if (result.status === 204)
-                return setCollection((prev: Icollection) => ({ ...prev, items: prev?.items?.filter(((item: { _id: string }) => item._id !== dataItem?._id)) }))
+                return setItems((items: any) => items.filter(((item: Iitem) => item._id !== dataItem?._id)))
         } catch (error) {
             throw error
         }
@@ -85,16 +84,16 @@ const TemplateItem = ({ type = 'create', dataItem, dataCollection, collectionAut
                             {errors.tags && <span>This field is required</span>}
                         </Form.Group>
                         <Form.Group>
-                            {dataCollection?.additional?.length && dataCollection?.additional?.map(((collectionField: Iitem['additional'], index: number) => {
-                                return (
-                                    <Form.Group key={collectionField?._id}>
+                            {dataCollection?.additional?.length
+                                ? (dataCollection?.additional?.map(((collectionField: Iitem['additional'], index: number) =>
+                                    <Form.Group key={collectionField.name}>
                                         <Form.Label>{collectionField.name}</Form.Label>
                                         <InputType control={control} register={register} index={index} fieldName={collectionField.name} fieldType={collectionField.value} />
-                                    </Form.Group>
-                                )
-                            }))}
+                                    </Form.Group>)))
+                                : ""}
                             <Form.Label>{t('card.modal.image')}</Form.Label>
-                            <Form.Control defaultValue={(type === 'edit' && dataItem?.linkImg) ? dataItem?.linkImg : ""} {...register("linkImg")} />
+                            <Form.Control defaultValue={(type === 'edit' && dataItem?.linkImg) ? dataItem?.linkImg : ""} {...register("linkImg", { pattern: /^(http|https):/ })} />
+                            {errors.linkImg && "Give URL to the image"}
                         </Form.Group>
                         <Form.Group className="my-3">
                             <Button type='submit'> {t('card.options.submit')} </Button>

@@ -13,7 +13,9 @@ const SwitchLanguage = () => {
 
     return (
         <Dropdown>
-            <Dropdown.Toggle><GoGlobe /></Dropdown.Toggle>
+            <Dropdown.Toggle>
+                <GoGlobe />
+            </Dropdown.Toggle>
             <Dropdown.Menu>
                 <Dropdown.Item onClick={() => changeLanguage('en')}>English</Dropdown.Item>
                 <Dropdown.Item onClick={() => changeLanguage('pl')}>Polski</Dropdown.Item>

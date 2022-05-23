@@ -1,6 +1,6 @@
 import { useState, useContext, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Col, Dropdown, Form, Nav, Row, Stack } from 'react-bootstrap'
+import { Col, Dropdown, Form, Nav, Row, Stack } from 'react-bootstrap'
 import { AuthContext, AuthContextType } from '../context/AuthContext'
 import { BsPersonCircle } from "react-icons/bs";
 import { useTranslation } from 'react-i18next'
@@ -57,8 +57,8 @@ const Navbar = () => {
                         </Col>
                     )
                     :
-                    <Col>
-                        <Button variant='warning' className="px-2"><Link to="/signin">Sign in</Link></Button>
+                    <Col className="px-3">
+                        <Link to="/signin" className="d-flex">{t('authorization.signin')}</Link>
                     </Col>}
             </Row>
         </Nav>
@@ -76,6 +76,16 @@ const SearchBar = () => {
     })
 
     const hideDropdown = () => setDropdown((prev: ISearchBarProps) => ({ ...prev, 'display': false }))
+
+    function debounce(callback: any, delay = 800) {
+        let timeout: ReturnType<typeof setTimeout>;
+        return (...args: any) => {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => {
+                callback(...args)
+            }, delay)
+        }
+    }
 
     const searchChange: any = async (data: { searchBar: string }) => {
         if (data.searchBar.length !== 0) {
@@ -106,15 +116,14 @@ const SearchBar = () => {
         <Stack direction="vertical" gap={2} className="d-none d-lg-flex">
             <Form onBlur={(e) => handleBlur(e)}>
                 <Form.Control className="me-auto" placeholder={t("navbar.placeholder")} style={{ width: '350px' }} autoComplete='off' {...register('searchBar', {
-                    onChange: handleSubmit(searchChange),
-                    minLength: 3
+                    onChange: debounce(handleSubmit(searchChange)),
                 })} />
                 <Dropdown show={dropdown.display}>
                     <Dropdown.Menu className="w-100">
                         {dropdown.result?.length ?
                             dropdown.result?.map((item: Partial<Iitem> | undefined) =>
                                 <Dropdown.Item key={item?._id} as={Link} to={`/admin/item/${item?._id}`} onClick={hideDropdown}>{item?.name}</Dropdown.Item>
-                            ) : <Dropdown.Item disabled>Not found</Dropdown.Item>}
+                            ) : <Dropdown.Item disabled>{t('item.textmessage.notfound')}</Dropdown.Item>}
                     </Dropdown.Menu>
                 </Dropdown>
             </Form>

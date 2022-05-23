@@ -5,7 +5,8 @@
       "profile": "Profil",
       "adminpanel": "Panel Administracyjny",
       "logout": "Wyloguj się"
-    }
+    },
+    "theme": "Tło"
   },
   "authorization": {
     "signin": "Zaloguj się",
@@ -56,6 +57,11 @@
     "like": "Lubię to",
     "dislike": "Nie lubię tego",
     "tags": "Etykiety",
-    "comments": "Komentarze"
+    "comments": "Komentarze",
+    "textmessage": {
+      "nocomments": "Nikt jeszcze nie skomentował tego przedmiotu",
+      "authtocomment": "Zaloguj się, aby skomentować ten przedmiot",
+      "notfound": "Nie znaleziono"
+    }
   }
 }

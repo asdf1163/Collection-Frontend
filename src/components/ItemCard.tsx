@@ -20,7 +20,7 @@ const ItemCard = ({ data }: Props) => {
         <Card.Title>{data.name}</Card.Title>
         <Card.Text>
         </Card.Text>
-        <Link to={`item/${data._id}`}>
+        <Link to={`/item/${data._id}`}>
           {t("card.options.readmore")}
         </Link>
       </Card.Body>

@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { Container, Row, Col, Button, Form } from 'react-bootstrap'
-import { useNavigate, useParams} from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getItem, postItem } from '../../../common/api/itemApi'
 import { useTranslation } from 'react-i18next'
 import { Iitem } from '../../../interfaces/collections.interfaces'
@@ -60,7 +60,7 @@ const Item = () => {
         const { data } = await getItem(`find/${itemId}`)
         setItem(data.item[0])
         if (data.item[0].owner.username !== username) {
-            return navigate(`/${data.item[0].owner.username}/item/${itemId}`)
+            return navigate(`/${data.item[0].owner.username}/item/${itemId}`, { replace: true })
         }
         setLike(data.like)
         setComments(data.comments[0])
@@ -73,23 +73,31 @@ const Item = () => {
     return item && (!item.length
         ? (
             <Container className="">
-                <Row className='gx-0 my-4'>
+                <Row className='gx-0 py-4'>
                     <Col lg={7} className="order-sm-0 order-lg-0 d-flex justify-content-center align-items-center">
                         <img
-                            className='img-thumbnail w-75 h-50'
+                            className='img-thumbnail w-75'
                             src={item.linkImg}
                             alt='itemImage'
                         />
                     </Col>
                     <Row className="my-5 py-5 justify-content-center order-lg-2 mx-0">
-                        <Button variant={isLiked ? "secondary" : "primary"} onClick={chandleLike}>{isLiked ? t('item.dislike') : t('item.like')}</Button>
+                        <Button
+                            variant={isLiked ? "secondary" : "primary"}
+                            onClick={chandleLike}
+                            disabled={!auth._id}
+                        >
+                            {isLiked ? t('item.dislike') : t('item.like')}
+                        </Button>
                     </Row>
                     <Col className='gx-0 order-lg-1'>
                         <h1 className='gx-0'>{item.name}</h1>
                         {item.description}
                         <hr />
                         <h5>{t('item.tags')}</h5>
-                        {item.tags}
+                        <span className="d-flex flex-wrap text-center gap-2">
+                            {item.tags.map((tag: string) => <div className="bg-secondary px-3 py-2">{tag}</div>)}
+                        </span>
                         {item.additional.map((additionalItem: Iitem) =>
                             <span key={Object.keys(additionalItem)[0]}>
                                 <hr />
@@ -104,16 +112,20 @@ const Item = () => {
                 <Row className="mt-5 gx-0">
                     <Col className='gx-0'>
                         <h3>{t('item.comments')}</h3>
-                        <CommentForm setComments={setComments} itemId={itemId} auth={{ _id: auth._id, username: auth.username }} />
-                        {comments.comments && comments.comments.map((comment: any) => {
+
+                        {auth._id ?
+                            <CommentForm setComments={setComments} itemId={itemId} auth={{ _id: auth._id, username: auth.username }} />
+                            : <h4>{t('item.textmessage.authtocomment')}</h4>}
+                        {comments.comments.length ? comments.comments.map((comment: any) => {
                             const [{ username }] = comments.users.filter((elem: any) => elem._id.includes(comment.userId))
-                            return (username && comment.message) && <CommentModel key={comment._id} comment={comment.message} username={username} />
-                        })}
+                            return (username && comment.message) ? <CommentModel key={comment._id} comment={comment.message} username={username} /> : ""
+                        }) : <h2>{t('item.textmessage.nocomments')}</h2>}
+
                     </Col>
                 </Row>
             </Container>
         )
-        : <div>Not found</div>
+        : <div>{t('item.textmessage.notfound')}</div>
     )
 }
 
@@ -122,7 +134,7 @@ const CommentForm = ({ setComments, itemId, auth }: ICommentForm) => {
     const { t } = useTranslation()
     const onSubmit: SubmitHandler<any> = async (data) => {
         try {
-            const result = await postItem(data, `comments/${itemId}`)
+            const result = await postItem(data, `comment/${itemId}`)
             resetField('message')
             if (result.status === 200) {
                 setComments((prev: { users: Icomment['users'][], comments: Icomment['comments'][] }) => {

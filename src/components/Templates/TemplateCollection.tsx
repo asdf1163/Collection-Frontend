@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
 import { Form, Button, Modal, Container, Row, Col } from 'react-bootstrap'
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form'
-import { deleteCollection, postCollection, updateCollection } from '../common/api/collectionApi'
-import { Icollection } from '../interfaces/collections.interfaces'
+import { deleteCollection, postCollection, updateCollection } from '../../common/api/collectionApi'
+import { Icollection } from '../../interfaces/collections.interfaces'
 import { useTranslation } from 'react-i18next'
 import { BsPlusCircle, BsX } from 'react-icons/bs'
 
 interface Props {
     type: 'create' | 'edit'
-    dataCollection?: any
-    collectionAuthorId?: string
+    dataCollection?: Icollection
     setCollections: React.Dispatch<React.SetStateAction<Icollection[]>>
 }
 
-
-const TemplateCollection = ({ type = 'create', dataCollection = {}, collectionAuthorId = "", setCollections }: Props) => {
+const TemplateCollection = ({ type = 'create', dataCollection, setCollections }: Props) => {
 
     const [show, setShow] = useState(false)
     const { t } = useTranslation()
@@ -27,15 +25,14 @@ const TemplateCollection = ({ type = 'create', dataCollection = {}, collectionAu
         name: "additional",
     });
 
-    const onSubmit: SubmitHandler<Icollection> = async (data) => {
+    const onSubmit: SubmitHandler<any> = async (data) => {
         try {
-            Object.assign(data, { idUser: collectionAuthorId });
             if (type === 'edit') {
-                const result = await updateCollection(data, `edit/${dataCollection._id}`)
+                const result = await updateCollection(data, `edit/${dataCollection?._id}`)
                 if (result.status === 204) {
                     setCollections((collections: any) => {
                         return collections?.map((collection: { _id: Icollection['_id'] }) => {
-                            if (collection._id === dataCollection._id) return data
+                            if (collection._id === dataCollection?._id) return data
                             else return collection
                         })
                     })
@@ -56,9 +53,9 @@ const TemplateCollection = ({ type = 'create', dataCollection = {}, collectionAu
 
     const handleDelete = async () => {
         try {
-            const result = await deleteCollection({ collectionAuthorId }, `delete/${dataCollection._id}`)
+            const result = await deleteCollection("", `delete/${dataCollection?._id}`)
             if (result.status === 204) {
-                setCollections((collections: Icollection[]) => collections.filter(((collection: Icollection) => collection._id !== dataCollection._id)))
+                setCollections((collections: Icollection[]) => collections.filter(((collection: Icollection) => collection._id !== dataCollection?._id)))
             }
         } catch (error) {
             throw (error)
@@ -124,7 +121,8 @@ const TemplateCollection = ({ type = 'create', dataCollection = {}, collectionAu
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>{t('card.modal.image')}</Form.Label>
-                            <Form.Control {...register("linkImg")} />
+                            <Form.Control type="text" {...register("linkImg", { pattern: /^(http|https):/ })} />
+                            {errors.linkImg && "Give URL to the image"}
                         </Form.Group>
                         <Form.Group className="my-3">
                             <Button type='submit'> {t('card.options.submit')} </Button>
