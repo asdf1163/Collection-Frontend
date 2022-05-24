@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Col } from 'react-bootstrap'
+import { Row } from 'react-bootstrap'
 import Filter from './Filter'
 import Sort from './Sort'
 
@@ -18,16 +18,12 @@ const Fusion = ({ data, options, changeData }: Props) => {
         changeData(searchData.filter((elem: any) => elem[option].includes(e.target.value)))
     }, [changeData, option, searchData])
 
-    return (
-        <>
-            <Col className="gx-0" md={0}>
-                <Sort changeData={changeData} setSearchData={setSearchData} />
-            </Col>
-            <Col>
-                <Filter data={searchData} changeData={changeValue} option={option} setOption={setOption} options={options} />
-            </Col>
-        </>
-    )
+    return data ? (
+        <Row className="flex-nowrap gap-2 gx-0">
+            <Sort changeData={changeData} setSearchData={setSearchData} />
+            <Filter data={searchData} changeData={changeValue} option={option} setOption={setOption} options={options} />
+        </Row>
+    ) : <></>
 }
 
 export default Fusion

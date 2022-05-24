@@ -33,7 +33,7 @@ const Sort = ({ changeData, setSearchData }: Props) => {
     }
 
     return (
-        <Dropdown>
+        <Dropdown className="w-25">
             <Dropdown.Toggle><MdSort size={20} /></Dropdown.Toggle>
             <Dropdown.Menu>
                 <Dropdown.Item onClick={() => handleSort(Isort.NEWEST)}>Newest</Dropdown.Item>

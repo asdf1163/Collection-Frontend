@@ -42,7 +42,7 @@ const Index = () => {
     }, [])
 
     return pending
-        ? <h2>Loading...</h2>
+        ? <h2>{t('action.loading')}</h2>
         : (requestError.display
             ? <Col className="w-100 h-100 justify-content-center align-items-center"><h2>{requestError.message}</h2></Col>
             : (<Container className="py-3">
@@ -52,7 +52,7 @@ const Index = () => {
                     </Row>
                     <h2>{t('homepage.latestitems')}</h2>
                     <Row lg={4} className="d-flex align-items-center gap-5">
-                        {boxes.latest.map((item: Iitem) => <ItemCard data={item} key={item._id} />)}
+                        {boxes.latest.map((item: Iitem) => <ItemCard key={item._id} item={item} collection={undefined} />)}
                     </Row>
                     <h2>{t('homepage.largestcollection')}</h2>
                     <Row lg={4} className="gap-5">

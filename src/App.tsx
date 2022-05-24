@@ -5,7 +5,7 @@ import Index from './pages/Index';
 import Navbar from './components/Navbar';
 import Profile from './pages/profile/Profile/Profile';
 import Item from './pages/profile/item/Item';
-import ItemList from './pages/profile/item/CollectionItems';
+import CollectionItems from './pages/profile/item/CollectionItems';
 import AdminPage from './pages/Admin/Index'
 import Signin from './pages/Authentication/Signin';
 import Signup from './pages/Authentication/Signup';
@@ -36,10 +36,11 @@ function App() {
             <Route index element={<Main />} />
             <Route path='collection' element={<Collection />} />
             <Route path='liked' element={<Liked />} />
-            <Route path="/:username/collection/:collectionId" element={<ItemList />} />
+            <Route path="/:username/collection/:collectionId" element={<CollectionItems />} />
           </Route>
           <Route path="/:username/item/:itemId" element={<Item />} />
           <Route path="/item/:itemId" element={<Item />} />
+          <Route path="/collection/:collectionId" element={<CollectionItems />} />
           <Route path="/search/:searchParam" element={<SearchResult />} />
           <Route path="*" element={<>Not found</>} />
         </Routes>

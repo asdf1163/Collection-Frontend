@@ -25,23 +25,23 @@ const TemplateCollection = ({ type = 'create', dataCollection, setCollections }:
         name: "additional",
     });
 
-    const onSubmit: SubmitHandler<any> = async (data) => {
+    const onSubmit: SubmitHandler<any> = async (formData) => {
         try {
             if (type === 'edit') {
-                const result = await updateCollection(data, `edit/${dataCollection?._id}`)
-                if (result.status === 204) {
+                const { status } = await updateCollection(formData, `edit/${dataCollection?._id}`)
+                if (status === 204) {
                     setCollections((collections: any) => {
                         return collections?.map((collection: { _id: Icollection['_id'] }) => {
-                            if (collection._id === dataCollection?._id) return data
+                            if (collection._id === dataCollection?._id) return formData
                             else return collection
                         })
                     })
                 }
             }
             else {
-                const result = await postCollection(data, 'create')
-                if (result.status === 200) {
-                    setCollections((collections: Icollection[]) => [...collections, { ...result.data }])
+                const { data, status } = await postCollection(formData, 'create')
+                if (status === 200) {
+                    setCollections((collections: Icollection[]) => [...collections, { ...data }])
                 }
             }
             setShow(false)
@@ -64,10 +64,12 @@ const TemplateCollection = ({ type = 'create', dataCollection, setCollections }:
 
     return (
         <>
-            <Button className="ms-auto" onClick={() => setShow(true)}>{type === 'edit' ? t('card.options.edit') : t('card.options.create')}</Button>
-            {type === 'edit' &&
-                <Button variant="danger" onClick={handleDelete}>{t('card.options.delete')}</Button>
-            }
+            <div className={type === 'edit' ? "d-flex gap-4 justify-content-center py-2 border w-100" : "d-flex gap-4 justify-content-center py-2"}>
+                <Button className="ms-auto" onClick={() => setShow(true)}>{type === 'edit' ? t('action.edit') : t('action.create')}</Button>
+                {type === 'edit' &&
+                    <Button variant="danger" onClick={handleDelete}>{t('action.delete')}</Button>
+                }
+            </div>
             <Modal show={show} size='lg' onHide={() => setShow(false)}>
                 <Modal.Header>
                     {type === 'edit' ? <h3>{t('card.modal.titleEditCollection')}: </h3> : <h3>{t('card.modal.titleCreateCollection')}: </h3>}
@@ -125,7 +127,7 @@ const TemplateCollection = ({ type = 'create', dataCollection, setCollections }:
                             {errors.linkImg && "Give URL to the image"}
                         </Form.Group>
                         <Form.Group className="my-3">
-                            <Button type='submit'> {t('card.options.submit')} </Button>
+                            <Button type='submit'> {t('action.submit')} </Button>
                         </Form.Group>
                     </Form>
                 </Container>

@@ -10,7 +10,6 @@ import CollectionsCard from '../../../../components/CollectionsCard'
 import TemplateCollection from '../../../../components/Templates/TemplateCollection'
 import Fusion from '../../../../components/Filter/Fusion'
 
-
 type IsetCollections = React.Dispatch<React.SetStateAction<Icollection[]>>
 
 const Collections = () => {
@@ -18,16 +17,20 @@ const Collections = () => {
     const { _id, username }: IuserSchema = useOutletContext();
     const { auth } = useContext(AuthContext) as AuthContextType
     const { t } = useTranslation()
-    const [collections, setCollections] = useState<Icollection[]>()
+    const [pending, setPending] = useState(false)
+    const [collections, setCollections] = useState<Icollection[]>([])
     const [displayError, setDisplayError] = useState({ display: false, message: "" })
 
     const getData = useCallback(async () => {
+        setPending(true)
         try {
-            const collections = await getCollection(`find/${_id}`)
-            setCollections(collections.data)
+            const { data, status } = await getCollection(`find/${_id}`)
+            if (status === 200)
+                setCollections(data)
         } catch (error: any) {
             setDisplayError({ display: true, message: error.response.data })
         }
+        setPending(false)
     }, [_id])
 
     useEffect(() => {
@@ -36,29 +39,39 @@ const Collections = () => {
         }
     }, [_id, getData, username])
 
-    return collections ? (
-        <div className='d-flex flex-column gap-2 my-3'>
-            <Stack direction='horizontal'>
-                <Row className="g-0">
-                    {(!displayError.display)
-                        ?
-                        <Fusion
-                            data={collections}
-                            changeData={setCollections}
-                            options={['name', 'topic', 'description']}
-                        />
-                        : ""}
-                </Row>
-                {(auth._id === _id || auth.privilage === "admin" || auth.privilage === "owner") &&
-                    <TemplateCollection type={'create'} setCollections={setCollections as IsetCollections} />
-                }
-            </Stack>
-            {
-                displayError.display
-                    ? <h2>{displayError.message}</h2>
-                    : (collections.length ? collections.map((collection: Icollection) => <CollectionsCard key={collection._id} collection={collection} setCollections={setCollections as IsetCollections} />) : <h2>{t('item.textmessage.notfound')}</h2>)
-            }
-        </div>
-    ) : <></>
+    return pending
+        ? <h2>{t('action.loading')}</h2>
+        : displayError.display
+            ? <h2>{displayError.message}</h2>
+            : (
+                <div className='d-flex flex-column gap-2 my-3'>
+                    <Stack direction='horizontal' className='justify-content-between'>
+                        <Row className="g-0">
+                            {(!displayError.display)
+                                ?
+                                <Fusion
+                                    data={collections}
+                                    changeData={setCollections}
+                                    options={['name', 'topic', 'description']}
+                                />
+                                : ""}
+                        </Row>
+                        {(auth._id === _id || auth.privilage === "admin" || auth.privilage === "owner") &&
+                            <TemplateCollection type={'create'} setCollections={setCollections as IsetCollections} />
+                        }
+                    </Stack>
+                    {
+                        (collections?.length ? collections?.map((collection: Icollection) =>
+                            <div key={collection._id}>
+                                <CollectionsCard collection={collection} />
+                                {(auth._id === collection.idUser || auth.privilage === "admin" || auth.privilage === "owner") ?
+                                    <div className="d-flex justify-content-end gap-2">
+                                        <TemplateCollection type={'edit'} dataCollection={collection} setCollections={setCollections as IsetCollections} />
+                                    </div> : ""}
+                            </div>
+                        ) : <h2>{t('action.notfound')}</h2>)
+                    }
+                </div>
+            )
 }
 export default Collections

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Badge } from 'react-bootstrap'
+import { Badge, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { getItem } from '../common/api/itemApi'
 
@@ -15,7 +15,7 @@ const TagCloud = () => {
         getTags()
     }, [getTags])
 
-    return (<>{tags.map(tagName => <Badge className='p-3 m-2 w-75' key={tagName} as={Link} to={`/search/${tagName}`}>{tagName}</Badge>)}</>)
+    return (<Col className="d-flex w-100 gap-2 my-3 scrollbar-pink">{tags.map(tagName => <Badge className='px-5 py-3' key={tagName} as={Link} to={`/search/${tagName}`}>{tagName}</Badge>)}</Col>)
 
 }
 

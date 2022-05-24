@@ -63,10 +63,12 @@ const TemplateItem = ({ type = 'create', dataItem, dataCollection, collectionAut
 
     return (
         <>
-            <Button onClick={() => setShow(true)}>{type === 'edit' ? t('card.options.edit') : t('card.options.create')}</Button>
-            {type === "edit" &&
-                <Button variant="danger" onClick={handleDelete}>{t('card.options.delete')}</Button>
-            }
+            <div className={type === 'edit' ? "d-flex gap-4 justify-content-center py-2 border" : "d-flex gap-4 justify-content-center py-2"}>
+                <Button onClick={() => setShow(true)}>{type === 'edit' ? t('action.edit') : t('action.create')}</Button>
+                {type === "edit" &&
+                    <Button variant="danger" onClick={handleDelete}>{t('action.delete')}</Button>
+                }
+            </div>
             <Modal show={show} size='lg' onHide={() => setShow(false)}>
                 <Modal.Header>
                     {type === 'create' ? <h3>{t('card.modal.titleCreateItem')}: </h3> : <h3>{t('card.modal.titleEditItem')}: </h3>}
@@ -96,7 +98,7 @@ const TemplateItem = ({ type = 'create', dataItem, dataCollection, collectionAut
                             {errors.linkImg && "Give URL to the image"}
                         </Form.Group>
                         <Form.Group className="my-3">
-                            <Button type='submit'> {t('card.options.submit')} </Button>
+                            <Button type='submit'> {t('action.submit')} </Button>
                         </Form.Group>
                     </Form>
                 </Container>

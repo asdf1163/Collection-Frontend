@@ -1,4 +1,5 @@
 import React, { useState, createContext, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { checkAuth } from '../common/api/userApi';
 import { IuserSchema } from '../interfaces/users.interfaces';
 
@@ -11,6 +12,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
 
+    const { t } = useTranslation()
     const pending = useRef(false)
     const [auth, setAuth] = useState<IuserSchema>(
         {
@@ -25,7 +27,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
 
     const checkAuthUser = useCallback(async () => {
         pending.current = true
-        const { data }: { data: { user: IuserSchema } } = await checkAuth()
+        const { data } = await checkAuth()
         setAuth(data.user)
         pending.current = false
         return data.user
@@ -38,7 +40,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }): JSX.Element 
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>
             {pending.current
-                ? <h2>Loading</h2>
+                ? <h2>{t('action.loading')}</h2>
                 : children
             }
         </AuthContext.Provider>

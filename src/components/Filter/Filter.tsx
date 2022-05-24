@@ -12,7 +12,7 @@ interface Props {
 const Filter = ({ data, options, changeData, option, setOption }: Props) => {
 
     return data.length ? (
-        <InputGroup>
+        <InputGroup className="w-75">
             <Dropdown>
                 <Dropdown.Toggle variant="outline-secondary">{option}</Dropdown.Toggle>
                 <Dropdown.Menu>

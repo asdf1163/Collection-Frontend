@@ -1,5 +1,4 @@
 import axios from "axios";
-
 export const url = 'https://project-collection001.herokuapp.com/api'
 
 axios.defaults.withCredentials = true;

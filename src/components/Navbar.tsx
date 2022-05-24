@@ -58,7 +58,7 @@ const Navbar = () => {
                     )
                     :
                     <Col className="px-3">
-                        <Link to="/signin" className="d-flex">{t('authorization.signin')}</Link>
+                        <Link to="/signin" className="text-nowrap">{t('authorization.signin')}</Link>
                     </Col>}
             </Row>
         </Nav>
@@ -77,13 +77,13 @@ const SearchBar = () => {
 
     const hideDropdown = () => setDropdown((prev: ISearchBarProps) => ({ ...prev, 'display': false }))
 
-    function debounce(callback: any, delay = 800) {
+    function debounce(callback: any) {
         let timeout: ReturnType<typeof setTimeout>;
         return (...args: any) => {
             clearTimeout(timeout)
             timeout = setTimeout(() => {
                 callback(...args)
-            }, delay)
+            }, 800)
         }
     }
 
@@ -123,7 +123,7 @@ const SearchBar = () => {
                         {dropdown.result?.length ?
                             dropdown.result?.map((item: Partial<Iitem> | undefined) =>
                                 <Dropdown.Item key={item?._id} as={Link} to={`/admin/item/${item?._id}`} onClick={hideDropdown}>{item?.name}</Dropdown.Item>
-                            ) : <Dropdown.Item disabled>{t('item.textmessage.notfound')}</Dropdown.Item>}
+                            ) : <Dropdown.Item disabled>{t('action.notfound')}</Dropdown.Item>}
                     </Dropdown.Menu>
                 </Dropdown>
             </Form>

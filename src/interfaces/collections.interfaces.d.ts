@@ -1,3 +1,5 @@
+import { IuserSchema } from "./users.interfaces"
+
 export interface Icollection {
     _id: any,
     idUser: string,
@@ -12,6 +14,7 @@ export interface Icollection {
     linkImg: string,
     creationDate: Date,
     items?: Iitem[]
+    users?: IuserSchema
 }
 
 export interface Iitem {
@@ -25,6 +28,7 @@ export interface Iitem {
         value: any
     },
     ownerId: any,
+    owner?: { username: string, _id: string },
     creationDate: Date,
     likes: any[],
     comments: {
